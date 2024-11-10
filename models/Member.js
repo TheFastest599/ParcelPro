@@ -33,6 +33,10 @@ const MemberSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  lastLogin: {
+    type: Date,
+    default: Date.now,
+  },
 });
 const Member = mongoose.model('member', MemberSchema);
 module.exports = Member;

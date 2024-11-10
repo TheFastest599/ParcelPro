@@ -1,6 +1,7 @@
 const HTML_TEMPLATE = (title, message) => {
   const client = process.env.CLIENT_URL;
   const email = 'ribhusaha2003@gmail.com';
+  const github = 'https://github.com/TheFastest599/ParcelPro';
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
   dir="ltr"
@@ -14,6 +15,7 @@ const HTML_TEMPLATE = (title, message) => {
     <meta name="x-apple-disable-message-reformatting" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta content="telephone=no" name="format-detection" />
+    <meta name="color-scheme" content="light" />
     <title>ParcelPro</title>
     <!--[if (mso 16)]>
       <style type="text/css">
@@ -591,23 +593,15 @@ const HTML_TEMPLATE = (title, message) => {
                                           <tr>
                                             <td
                                               align="left"
-                                              style="padding: 0; margin: 0"
-                                            >
-                                              <p
-                                                style="
-                                                  margin: 0;
+                                              style="margin: 0;
+                                                  padding: 0;
                                                   mso-line-height-rule: exactly;
-                                                  font-family: 'comic sans ms',
-                                                    'marker felt-thin', arial,
-                                                    sans-serif;
                                                   line-height: 21px;
                                                   letter-spacing: 0;
                                                   color: #333333;
-                                                  font-size: 14px;
-                                                "
-                                              >
-                                                ${message}
-                                              </p>
+                                                  font-size: 16px;"
+                                            >
+                                            ${message}
                                             </td>
                                           </tr>
                                         </tbody>
@@ -842,7 +836,7 @@ const HTML_TEMPLATE = (title, message) => {
                                                     font-size: 14px;
                                                     line-height: 14px !important;
                                                   "
-                                                  href=""
+                                                  href="${github}"
                                                   >Github</a
                                                 >
                                               </p>

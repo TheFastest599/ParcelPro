@@ -1,27 +1,30 @@
-# MyNotebook - Backend
+# ParcelPro
 
-Welcome to MyNotebook, the ultimate productivity app designed to streamline your daily tasks and help you stay organized. With a user-friendly interface and powerful features, MyNotebook is your go-to companion for managing notes, todos, and email reminders efficiently.
+Welcome to ParcelPro, your ultimate solution for efficient and reliable courier management. With a user-friendly interface and powerful features, ParcelPro is designed to streamline your shipping operations and ensure timely deliveries.
 
-## Technologies used
+## Technologies Used
 
-MERN Stack,Bootstrap and Material UI.
+- MERN Stack (MongoDB, Express, React, Node.js)
+- Tailwind CSS
 
 ## Getting Started
 
-### How to run-
+### How to Run
 
-1. Run the command
-   `npm start`.
-2. Setup your own credentials,enviroment variables in the `.env` files.
+1. Clone the repository:
 
-### Usage
+   ```sh
+   git clone https://github.com/TheFastest599/ParcelPro.git
+   cd parcelpro
+   ```
 
-1. Launch MyNotebook and explore the intuitive interface.
-2. Create notes, todos, and set up email reminders to enhance your productivity.
-3. Customize settings to tailor MyNotebook to your preferences.
+2. Install dependencies
 
-### Live at - https://mynotebook-backend-817b.onrender.com
+   ```
+   npm install
+   ```
 
-## Feedback and Support
-
-Email - ribhusaha2003@gmail.com
+3. Run the repo
+   ```
+   node index.js
+   ```

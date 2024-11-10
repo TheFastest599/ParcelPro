@@ -1,8 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment-timezone');
 const fetchuser = require('../middleware/fetchuser');
 const Package = require('../models/Package');
 const Member = require('../models/Member');
+const mailSender = require('../assets/mail.main.template');
+require('dotenv').config();
+
+let mailOptions = {
+  from: `"ParcelPro" <${process.env.EMAIL}>`,
+  to: '',
+  subject: '',
+  title: '',
+  message: '',
+};
+
+const client = process.env.CLIENT_URL;
+
+const processDate = date => {
+  const formattedDate = moment(date).tz('Asia/Kolkata').format('DD-MM-YYYY');
+  const formattedTime = moment(date).tz('Asia/Kolkata').format('HH:mm');
+
+  return `${formattedDate}, ${formattedTime}`;
+};
 
 // Route 1: Add a new package using: POST "/api/packages/add". Login required
 router.post('/add', fetchuser, async (req, res) => {
@@ -11,7 +31,7 @@ router.post('/add', fetchuser, async (req, res) => {
     const package = new Package({
       ...temp,
       customer: req.user.id,
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: Date.now(),
     });
     // console.log(package);
     const savePackage = await package.save();
@@ -108,7 +128,7 @@ router.post('/addjob', fetchuser, async (req, res) => {
           .json({ message: 'Package is already assigned to someone' });
       }
       package.status = 'dispatched';
-      package.lastUpdated = new Date().toISOString();
+      package.lastUpdated = Date.now();
       // send user mail for dispatched
       const member = await Member.findById(memberId);
       member.engaged = true;
@@ -116,6 +136,22 @@ router.post('/addjob', fetchuser, async (req, res) => {
       package.transit.driverName = member.name;
       package.save();
       member.save();
+
+      // Send package dispatched mail to user
+      mailOptions.to = package.receiver.email;
+      mailOptions.subject = 'Your Package is on the Way!';
+      mailOptions.title = 'Package Dispatched';
+      mailOptions.message = `
+        <p>Hello ${package.receiver.name},</p>
+        <p>We are excited to inform you that your package has been dispatched and will soon be in transit on its way to you.</p>
+        <p>You can track the status of your package using the following link:</p>
+        <p><a href="${client}/track/${package.trackID}" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
+        <p>Thank you for choosing ParcelPro. We hope you have a great experience with our service!</p>
+        <p>Best regards,</p>
+        <p><strong>Team ParcelPro</strong></p>
+      `;
+      mailSender(mailOptions);
+      //---------------------------------------------------------------
       res.json({
         message: 'Job Assigned Successfully',
         package: package,
@@ -135,7 +171,7 @@ router.post('/addjob', fetchuser, async (req, res) => {
       }
       package.delivery.otp = Math.floor(100000 + Math.random() * 900000);
       package.status = 'out';
-      package.lastUpdated = new Date().toISOString();
+      package.lastUpdated = Date.now();
       // console.log(package);
       // send user mail for out for delivery with otp
       const member = await Member.findById(memberId);
@@ -144,6 +180,24 @@ router.post('/addjob', fetchuser, async (req, res) => {
       package.delivery.deliveryPartnerName = member.name;
       package.save();
       member.save();
+
+      // Send package out for delivery mail to user
+      mailOptions.to = package.receiver.email;
+      mailOptions.subject = 'Your Package is Out for Delivery';
+      mailOptions.title = 'Package Out For Delivery';
+      mailOptions.message = `
+        <p>Hello ${package.receiver.name},</p>
+        <p>We are excited to inform you that your package has been staged and will be out for delivery soon.</p>
+        <p>You can track the status of your package using the following link:</p>
+        <p><a href="${client}/track/${package.trackID}" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
+        <p>Your OTP for the package is: <strong>${package.delivery.otp}</strong></p>
+        <p>Please provide this OTP to our delivery partner, <strong>${package.delivery.deliveryPartnerName}</strong>, to receive your package.</p>
+        <p>Thank you for choosing ParcelPro. We hope you have a great experience with our service!</p>
+        <p>Best regards,</p>
+        <p><strong>Team ParcelPro</strong></p>
+      `;
+      mailSender(mailOptions);
+      //---------------------------------------------------------------
       // console.log(member);
       res.json({
         message: 'Job Assigned Successfully',
@@ -164,7 +218,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
     const memberType = req.body.memberType;
     const packageId = req.body.packageId;
     const package = await Package.findById(packageId);
-    const date = new Date().toISOString();
+    const date = Date.now();
     let driverReleived = false;
 
     if (!package) {
@@ -199,6 +253,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
       if (reachedDest) {
         member = await Member.findById(memberId).select('-packageId');
         member.engaged = false;
+        member.packageId = '';
         member.save();
         driverReleived = true;
       }
@@ -229,10 +284,31 @@ router.post('/updatejob', fetchuser, async (req, res) => {
           package.lastUpdated = date;
           package.save();
           member.engaged = false;
+          member.packageId = '';
           member.save();
           driverReleived = true;
           // console.log(package, member);
         }
+        // Send package delivered mail to sender
+        mailOptions.to = package.sender.email;
+        mailOptions.subject = 'Your Package has been Delivered!';
+        mailOptions.title = 'Package Delivered';
+        mailOptions.message = `
+          <p>Hello ${package.sender.name},</p>
+          <p>We are pleased to inform you that your package has been successfully delivered to ${
+            package.receiver.name
+          } on ${processDate(package.delivery.date)}.</p>
+          <p>You can track the journey of your package using the following link:</p>
+          <p><a href="${client}/track/${
+          package.trackID
+        }" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
+          <p>Thank you for choosing ParcelPro. We hope you had a great experience with our service!</p>
+          <p>Best regards,</p>
+          <p><strong>Team ParcelPro</strong></p>
+        `;
+
+        mailSender(mailOptions);
+        //---------------------------------------------------------------
         res.status(200).json({
           message: 'Package delivered successfully',
           package: package,
@@ -250,9 +326,37 @@ router.post('/updatejob', fetchuser, async (req, res) => {
         package.lastUpdated = date;
         package.save();
         member.engaged = false;
+        member.packageId = '';
         member.save();
         // console.log(package, member);
         driverReleived = true;
+
+        // Send package delivery failed mail to sender
+        mailOptions.to = package.sender.email;
+        mailOptions.subject = 'Your Package Delivery has Failed';
+        mailOptions.title = 'Package Delivery Failed';
+        mailOptions.message = `
+          <p>Hello ${package.sender.name},</p>
+          <p>We regret to inform you that the delivery of your package to ${
+            package.receiver.name
+          } has failed on ${processDate(package.delivery.date)}.</p>
+          <p><strong>Action taken</strong>: ${
+            package.delivery.failed.deliveryFailAction
+          }</p>
+          <p><strong>Reason for failure</strong>: ${
+            package.delivery.failed.description
+          }</p>
+          <p>You can track the status of your package and take necessary actions using the following link:</p>
+          <p><a href="${client}/track/${
+          package.trackID
+        }" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
+          <p>If you have any questions or need assistance, please don't hesitate to reach out to our support team.</p>
+          <p>Thank you for choosing ParcelPro. We apologize for any inconvenience caused.</p>
+          <p>Best regards,</p>
+          <p><strong>Team ParcelPro</strong></p>
+        `;
+        mailSender(mailOptions);
+        //---------------------------------------------------------------
         res.status(200).json({
           message: 'Package delivery failed',
           package: package,

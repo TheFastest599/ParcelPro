@@ -29,7 +29,7 @@ const sendMail = async data => {
 
 sendMail({
   email: 'ribhusaha2003@gmail.com',
-  subject: 'testing',
-  title: 'try 2',
-  message: 'try 3',
+  subject: 'Test Email',
+  title: 'Hello!',
+  message: '<p>This is a test email. for image </p>',
 });
