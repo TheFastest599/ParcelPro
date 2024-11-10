@@ -180,7 +180,7 @@ router.post('/userforgotpassword', async (req, res) => {
 
     // 3. Send it to user's email
     try {
-      const resetURL = `${client}/customer/reset_password/${resetToken}`;
+      const resetURL = `https://${client}/customer/reset_password/${resetToken}`;
       mailOptions.to = user.email;
       mailOptions.subject = 'Password Reset Request';
       mailOptions.title = 'Password Reset';

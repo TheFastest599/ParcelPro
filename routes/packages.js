@@ -145,7 +145,7 @@ router.post('/addjob', fetchuser, async (req, res) => {
         <p>Hello ${package.receiver.name},</p>
         <p>We are excited to inform you that your package has been dispatched and will soon be in transit on its way to you.</p>
         <p>You can track the status of your package using the following link:</p>
-        <p><a href="${client}/track/${package.trackID}" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
+        <p><a href="https://${client}/track/${package.trackID}" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
         <p>Thank you for choosing ParcelPro. We hope you have a great experience with our service!</p>
         <p>Best regards,</p>
         <p><strong>Team ParcelPro</strong></p>
@@ -189,7 +189,7 @@ router.post('/addjob', fetchuser, async (req, res) => {
         <p>Hello ${package.receiver.name},</p>
         <p>We are excited to inform you that your package has been staged and will be out for delivery soon.</p>
         <p>You can track the status of your package using the following link:</p>
-        <p><a href="${client}/track/${package.trackID}" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
+        <p><a href="https://${client}/track/${package.trackID}" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
         <p>Your OTP for the package is: <strong>${package.delivery.otp}</strong></p>
         <p>Please provide this OTP to our delivery partner, <strong>${package.delivery.deliveryPartnerName}</strong>, to receive your package.</p>
         <p>Thank you for choosing ParcelPro. We hope you have a great experience with our service!</p>
@@ -299,7 +299,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
             package.receiver.name
           } on ${processDate(package.delivery.date)}.</p>
           <p>You can track the journey of your package using the following link:</p>
-          <p><a href="${client}/track/${
+          <p><a href="https://${client}/track/${
           package.trackID
         }" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
           <p>Thank you for choosing ParcelPro. We hope you had a great experience with our service!</p>
@@ -347,7 +347,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
             package.delivery.failed.description
           }</p>
           <p>You can track the status of your package and take necessary actions using the following link:</p>
-          <p><a href="${client}/track/${
+          <p><a href="https://${client}/track/${
           package.trackID
         }" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
           <p>If you have any questions or need assistance, please don't hesitate to reach out to our support team.</p>
