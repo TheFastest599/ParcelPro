@@ -7,6 +7,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
 const mailSender = require('../assets/mail.main.template');
+const emailExistence = require('email-existence');
+
 require('dotenv').config();
 
 const client = process.env.CLIENT_URL;
@@ -22,6 +24,27 @@ let mailOptions = {
 const { body, validationResult } = require('express-validator');
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+function checkEmail(email) {
+  return new Promise((resolve, reject) => {
+    emailExistence.check(email, function (error, response) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}
+
+async function getEmailResponse(email) {
+  try {
+    const response = await checkEmail(email);
+    return response;
+  } catch (error) {
+    return false;
+  }
+}
 
 // User---------------------------------------------------------------------
 
@@ -42,7 +65,17 @@ router.post(
     }
     try {
       // Check whether the user with this email exists already
-      let user = await User.findOne({ email: req.body.email });
+      let [user, emailResponse] = await Promise.all([
+        User.findOne({ email: req.body.email }),
+        getEmailResponse(req.body.email),
+      ]);
+      // let user = await User.findOne({ email: req.body.email });
+      if (!emailResponse) {
+        return res.status(400).json({
+          success,
+          error: 'Please enter a valid email address.',
+        });
+      }
       if (user) {
         return res.status(400).json({
           success,
@@ -180,7 +213,9 @@ router.post('/userforgotpassword', async (req, res) => {
 
     // 3. Send it to user's email
     try {
-      const resetURL = `https://${client}/customer/reset_password/${resetToken}`;
+      const resetURL = `${
+        client.startsWith('localhost') ? 'http://' : 'https://'
+      }/customer/reset_password/${resetToken}`;
       mailOptions.to = user.email;
       mailOptions.subject = 'Password Reset Request';
       mailOptions.title = 'Password Reset';
@@ -318,7 +353,17 @@ router.post(
     }
     try {
       // Check whether the member with this email exists already
-      let user = await Member.findOne({ email: req.body.email });
+      // let user = await Member.findOne({ email: req.body.email });
+      let [user, emailResponse] = await Promise.all([
+        Member.findOne({ email: req.body.email }),
+        getEmailResponse(req.body.email),
+      ]);
+      if (!emailResponse) {
+        return res.status(400).json({
+          success,
+          error: 'Please enter a valid email address.',
+        });
+      }
       if (user) {
         return res.status(400).json({
           success,
@@ -483,7 +528,9 @@ router.post('/memberforgotpassword', async (req, res) => {
 
     // 3. Send it to user's email
     try {
-      const resetURL = `${client}/company/reset_password/${resetToken}`;
+      const resetURL = `${
+        client.startsWith('localhost') ? 'http://' : 'https://'
+      }company/reset_password/${resetToken}`;
       mailOptions.to = user.email;
       mailOptions.subject = 'Password Reset Request';
       mailOptions.title = 'Password Reset';

@@ -7,7 +7,10 @@ connectToMongo();
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors());
+if (process.env.DEV === 'true') {
+  console.log('CORS enabled!');
+  app.use(cors());
+}
 app.use(express.json());
 
 // To serve static files
