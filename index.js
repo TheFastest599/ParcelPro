@@ -6,6 +6,7 @@ const path = require('path');
 connectToMongo();
 const app = express();
 const port = process.env.PORT;
+const client = process.env.CLIENT_URL;
 
 if (process.env.DEV === 'true') {
   console.log('CORS enabled!');
@@ -44,5 +45,5 @@ app.get('*', (req, res) => {
 // main.js
 
 app.listen(port, () => {
-  console.log(`ParcelPro Apps listening at http://localhost:${port}`);
+  console.log(`ParcelPro Apps listening at ${client}:${port}`);
 });
