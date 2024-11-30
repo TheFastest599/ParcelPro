@@ -8,6 +8,7 @@ let mailOptions = {
   title: '',
   message: '',
   dateTimeLocalString: '',
+  priority: 'high',
 };
 
 // Send mail

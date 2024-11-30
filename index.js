@@ -45,5 +45,5 @@ app.get('*', (req, res) => {
 // main.js
 
 app.listen(port, () => {
-  console.log(`ParcelPro Apps listening at ${client}:${port}`);
+  console.log(`ParcelPro Apps listening at ${client}`);
 });

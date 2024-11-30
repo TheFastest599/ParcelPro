@@ -13,6 +13,7 @@ let mailOptions = {
   subject: '',
   title: '',
   message: '',
+  priority: 'high',
 };
 
 const client = process.env.CLIENT_URL;
@@ -311,9 +312,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
             package.receiver.name
           } on ${processDate(package.delivery.date)}.</p>
           <p>You can track the journey of your package using the following link:</p>
-          <p><a href="${
-            client.startsWith('localhost') ? 'http://' : 'https://'
-          }/track/${
+          <p><a href="${client}/track/${
           package.trackID
         }" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
           <p>Thank you for choosing ParcelPro. We hope you had a great experience with our service!</p>
@@ -361,9 +360,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
             package.delivery.failed.description
           }</p>
           <p>You can track the status of your package and take necessary actions using the following link:</p>
-          <p><a href="${
-            client.startsWith('localhost') ? 'http://' : 'https://'
-          }/track/${
+          <p><a href="${client}/track/${
           package.trackID
         }" style="color: #007bff; text-decoration: none;">Track Your Package</a></p>
           <p>If you have any questions or need assistance, please don't hesitate to reach out to our support team.</p>

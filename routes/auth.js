@@ -19,6 +19,7 @@ let mailOptions = {
   subject: '',
   title: '',
   message: '',
+  priority: 'high',
 };
 
 const { body, validationResult } = require('express-validator');
@@ -276,60 +277,6 @@ router.post('/userresetpassword', async (req, res) => {
     });
   }
 });
-
-// //Route 7: Delete User : POST "/api/auth/deleteuser"  login required
-// router.delete('/deleteuser', fetchuser, async (req, res) => {
-//   try {
-//     let userId = req.user.id;
-//     const { password } = req.body;
-//     let success = false;
-//     const user = await User.findById(userId);
-//     const passwordCompare = await bcrypt.compare(password, user.password);
-//     if (user) {
-//       if (passwordCompare) {
-//         success = true;
-//         // Get all notes,todos and reminders ready for deletion
-//         const notes = await Note.find({ user: req.user.id });
-//         const todos = await Todo.find({ user: req.user.id });
-//         const reminders = await Reminder.find({ user: req.user.id });
-//         await User.findByIdAndDelete(userId);
-//         notes.forEach(async note => {
-//           await Note.findByIdAndDelete(note._id);
-//         });
-//         todos.forEach(async todo => {
-//           await Todo.findByIdAndDelete(todo._id);
-//         });
-//         reminders.forEach(async reminder => {
-//           await Reminder.findByIdAndDelete(reminder._id);
-//         });
-//         // Send success deleted message
-//         res.json({
-//           success,
-//           message: 'User deleted',
-//         });
-//         console.log('User deleted');
-//         // Send the user email about successfull account deletion
-//         mailOptions.to = user.email;
-//         mailOptions.subject = 'Goodbye from MyNotebook';
-//         mailOptions.text = 'Goodbye from MyNotebook';
-//         mailOptions.title = `Successfully deleted ${user.name}'s account from MyNotebook`;
-//         mailOptions.message = `We're sad to see you go but we understand that goodbyes are a part of the journey.
-// Thank you for being a part of MyNotebook. Your presence added to the essence of what we've built.
-// Remember, your notes, todos, and reminders always have a home here. Should you decide to return,
-// we'll welcome you back with open arms. Until then, we wish you all the best on your journey ahead.
-// Farewell, and may your days be filled with organization and productivity! 🌟`;
-//         mailSender(mailOptions);
-//       } else {
-//         res.status(400).json({ success, error: 'Password is incorrect' });
-//       }
-//     } else {
-//       res.status(404).send('User not found');
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send('Internal server Error');
-//   }
-// });
 
 // -------------------------------------------------------------------------
 
