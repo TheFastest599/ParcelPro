@@ -28,3 +28,7 @@ Welcome to ParcelPro, your ultimate solution for efficient and reliable courier 
    ```
    node index.js
    ```
+
+### ParcelPro - frontend [frontend github link](https://github.com/TheFastest599/ParcelPro-frontend)
+
+### Live link [link](https://parcelpro.onrender.com/)
