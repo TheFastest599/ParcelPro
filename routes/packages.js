@@ -266,8 +266,9 @@ router.post('/updatejob', fetchuser, async (req, res) => {
       if (reachedDest) {
         member = await Member.findById(memberId).select('-packageId');
         member.engaged = false;
-        member.packageId = '';
+        member.packageId = null;
         member.save();
+        // console.log(package, member);
         driverReleived = true;
       }
       res.status(200).json({
@@ -297,7 +298,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
           package.lastUpdated = date;
           package.save();
           member.engaged = false;
-          member.packageId = '';
+          member.packageId = null;
           member.save();
           driverReleived = true;
           // console.log(package, member);
@@ -339,7 +340,7 @@ router.post('/updatejob', fetchuser, async (req, res) => {
         package.lastUpdated = date;
         package.save();
         member.engaged = false;
-        member.packageId = '';
+        member.packageId = null;
         member.save();
         // console.log(package, member);
         driverReleived = true;
