@@ -7,7 +7,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
 const mailSender = require('../assets/mail.main.template');
-const emailExistence = require('email-existence');
 
 require('dotenv').config();
 
@@ -25,27 +24,6 @@ let mailOptions = {
 const { body, validationResult } = require('express-validator');
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
-function checkEmail(email) {
-  return new Promise((resolve, reject) => {
-    emailExistence.check(email, function (error, response) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(response);
-      }
-    });
-  });
-}
-
-async function getEmailResponse(email) {
-  try {
-    const response = await checkEmail(email);
-    return response;
-  } catch (error) {
-    return false;
-  }
-}
 
 // User---------------------------------------------------------------------
 
@@ -66,17 +44,9 @@ router.post(
     }
     try {
       // Check whether the user with this email exists already
-      let [user, emailResponse] = await Promise.all([
-        User.findOne({ email: req.body.email }),
-        getEmailResponse(req.body.email),
-      ]);
-      // let user = await User.findOne({ email: req.body.email });
-      if (!emailResponse) {
-        return res.status(400).json({
-          success,
-          error: 'Please enter a valid email address.',
-        });
-      }
+
+      let user = await User.findOne({ email: req.body.email });
+
       if (user) {
         return res.status(400).json({
           success,
@@ -300,17 +270,8 @@ router.post(
     }
     try {
       // Check whether the member with this email exists already
-      // let user = await Member.findOne({ email: req.body.email });
-      let [user, emailResponse] = await Promise.all([
-        Member.findOne({ email: req.body.email }),
-        getEmailResponse(req.body.email),
-      ]);
-      if (!emailResponse) {
-        return res.status(400).json({
-          success,
-          error: 'Please enter a valid email address.',
-        });
-      }
+      let user = await Member.findOne({ email: req.body.email });
+
       if (user) {
         return res.status(400).json({
           success,
