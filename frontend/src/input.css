@@ -1,0 +1,12 @@
+/* input.css */
+
+/* Import Tailwind CSS */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Your custom CSS code */
+/* You can use Tailwind CSS utility classes here */
+/* For example: */
+
+/* Add more custom styles as needed */

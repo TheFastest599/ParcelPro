@@ -1,32 +1,21 @@
 {
-  "name": "parcelpro",
+  "name": "parcelpro-monorepo",
   "version": "1.0.0",
-  "description": "inotebook - your notebook on the cloud",
-  "main": "index.js",
+  "private": true,
+  "description": "ParcelPro monorepo for backend and frontend.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "install": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install && cd ..",
+    "install:frontend": "cd frontend && npm install && cd ..",
+    "postinstall": "npm run install:backend && npm run install:frontend",
+    "build": "npm run build:prod || npm run build:dev",
+    "build:prod": "cd frontend && cross-env BUILD_PATH=../build npm run build && cd ..",
+    "build:dev": "cd frontend && npm run build",
+    "server": "npm start --prefix backend",
+    "start": "npm run server"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "bull": "^4.16.3",
-    "cors": "^2.8.5",
-    "dayjs": "^1.11.10",
-    "dotenv": "^16.4.5",
-    "email-existence": "^0.1.6",
-    "express": "^4.18.2",
-    "express-validator": "^7.0.1",
-    "googleapis": "^140.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "moment-timezone": "^0.5.46",
-    "mongodb": "^6.3.0",
-    "mongoose": "^8.0.3",
-    "morgan": "^1.10.0",
-    "nodemailer": "^6.9.11"
+    "cross-env": "^7.0.3"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  }
+  "devDependencies": {}
 }

@@ -1,6 +1,6 @@
 # ParcelPro
 
-Welcome to ParcelPro, your ultimate solution for efficient and reliable courier management. With a user-friendly interface and powerful features, ParcelPro is designed to streamline your shipping operations and ensure timely deliveries.
+ParcelPro is a courier service application that helps users manage and track their packages efficiently.
 
 ## Technologies Used
 
@@ -9,26 +9,71 @@ Welcome to ParcelPro, your ultimate solution for efficient and reliable courier 
 
 ## Getting Started
 
-### How to Run
+### Prerequisites
 
-1. Clone the repository:
+- Node.js
+- npm
 
-   ```sh
-   git clone https://github.com/TheFastest599/ParcelPro.git
-   cd parcelpro
-   ```
+### Repository Structure
 
-2. Install dependencies
+- `backend/` - Express.js backend (API, database models, authentication, etc.)
+- `frontend/` - React frontend (UI, client logic)
 
-   ```
-   npm install
-   ```
+## Monorepo Setup
 
-3. Run the repo
-   ```
-   node index.js
-   ```
+### Install All Dependencies
 
-### ParcelPro - frontend [frontend github link](https://github.com/TheFastest599/ParcelPro-frontend)
+From the root folder, run:
 
-### Live link [link](https://parcelpro.onrender.com/)
+```sh
+npm install
+```
+
+This will install dependencies for both backend and frontend automatically.
+
+### Build Frontend (Production)
+
+To build the frontend for production and output to the root `/build` folder:
+
+```sh
+npm run build:prod
+```
+
+For development build (output in `frontend/build`):
+
+```sh
+npm run build:dev
+```
+
+### Start Backend Server
+
+From the root folder, run:
+
+```sh
+npm start
+```
+
+This will start the backend server. In production, it will serve the frontend from the root `/build` folder.
+
+### Environment Variables
+
+Place your environment files in the root as `.env.backend` (for backend) and `.env.frontend` (for frontend). The backend will automatically load `.env.backend` if present.
+
+---
+
+The frontend will run on [http://localhost:3000](http://localhost:3000) by default in development mode.
+
+## Scripts
+
+- `npm install` — Installs all dependencies (backend & frontend)
+- `npm run build:prod` — Builds frontend to root `/build` (for production)
+- `npm run build:dev` — Builds frontend to `/frontend/build` (for development)
+- `npm start` — Starts backend server (serves frontend from `/build` in production)
+
+## Links
+
+- [Live Demo](https://parcelpro.onrender.com/)
+
+---
+
+For more details, see the `README.md` files in each subfolder.
