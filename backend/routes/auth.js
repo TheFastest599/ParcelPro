@@ -184,9 +184,12 @@ router.post('/userforgotpassword', async (req, res) => {
 
     // 3. Send it to user's email
     try {
-      const resetURL = `${
-        client.startsWith('localhost') ? 'http://' : 'https://'
-      }/customer/reset_password/${resetToken}`;
+      let base = client;
+      if (!/^https?:\/\//.test(base)) {
+        base = (base.startsWith('localhost') ? 'http://' : 'https://') + base;
+      }
+      base = base.replace(/\/$/, '');
+      const resetURL = `${base}/customer/reset_password/${resetToken}`;
       mailOptions.to = user.email;
       mailOptions.subject = 'Password Reset Request';
       mailOptions.title = 'Password Reset';
@@ -436,9 +439,12 @@ router.post('/memberforgotpassword', async (req, res) => {
 
     // 3. Send it to user's email
     try {
-      const resetURL = `${
-        client.startsWith('localhost') ? 'http://' : 'https://'
-      }company/reset_password/${resetToken}`;
+      let base = client;
+      if (!/^https?:\/\//.test(base)) {
+        base = (base.startsWith('localhost') ? 'http://' : 'https://') + base;
+      }
+      base = base.replace(/\/$/, '');
+      const resetURL = `${base}/company/reset_password/${resetToken}`;
       mailOptions.to = user.email;
       mailOptions.subject = 'Password Reset Request';
       mailOptions.title = 'Password Reset';
